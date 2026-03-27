@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3D Gradient Cube</title>
+    <style>
+        /* 全局样式：让立方体居中，方便看效果 */
+        body {
+            /* 让页面高度撑满屏幕，方便居中 */
+            min-height: 100vh;
+            /* 弹性布局，让立方体在页面正中间 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* 背景色设为浅灰，突出立方体 */
+            background-color: #f0f0f0;
+            /* 清除默认边距，避免布局错位 */
+            margin: 0;
+        }
+
+        /* 立方体容器：用来固定3个面的位置，拼成立方体 */
+        .cube {
+            /* 相对定位：让里面的绝对定位方块以它为基准 */
+            position: relative;
+            /* 立方体的边长设为200px，大小合适 */
+            width: 200px;
+            height: 200px;
+            /* 让3个面都以容器中心为原点变换，透视更自然 */
+            transform-style: preserve-3d;
+            /* 给立方体一个轻微的旋转，让3D效果更明显（可选，不影响要求） */
+            transform: rotateX(-20deg) rotateY(30deg);
+        }
+
+        /* 立方体的3个面：正面、顶面、右侧面（用3个div拼成立方体） */
+        .cube-face {
+            /* 绝对定位：让3个面重叠在容器上，再用transform分开 */
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* 每个面的大小和容器一致，200x200px */
+            width: 100%;
+            height: 100%;
+            /* 给每个面加边框，区分边缘，更像3D */
+            border: 1px solid #333;
+            /* 让方块的背面不可见，避免透视错乱 */
+            backface-visibility: hidden;
+        }
+
+        /* 1. 正面：基础面，用来做立方体的正面 */
+        .cube-front {
+            /* 线性渐变：从浅蓝到深蓝，模拟光影，符合linear-gradient要求 */
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+            /* 正面不需要倾斜，保持原位，作为基准 */
+            transform: translateZ(100px);
+        }
+
+        /* 2. 顶面：用skewX倾斜，模拟3D顶面 */
+        .cube-top {
+            /* 线性渐变：从浅黄到深黄，和正面区分，更有层次感 */
+            background: linear-gradient(135deg, #FFFFE0 0%, #FFD700 100%);
+            /* 第一步：skewX(-45deg) 沿X轴向左倾斜45度，模拟顶面的透视 */
+            transform: skewX(-45deg) 
+                        /* 第二步：translateY(-100px) 把倾斜后的顶面向上移动，拼到正面的顶部 */
+                        translateY(-100px)
+                        /* 第三步：translateZ(0) 固定Z轴位置，避免错位 */
+                        translateZ(0);
+            /* 顶面的原点设为底部中心，倾斜更自然 */
+            transform-origin: bottom center;
+        }
+
+        /* 3. 右侧面：用skewY倾斜，模拟3D右侧面 */
+        .cube-right {
+            /* 线性渐变：从浅绿到深绿，第三个渐变面，完全符合要求 */
+            background: linear-gradient(135deg, #90EE90 0%, #32CD32 100%);
+            /* 第一步：skewY(45deg) 沿Y轴向右倾斜45度，模拟右侧面的透视 */
+            transform: skewY(45deg)
+                        /* 第二步：translateX(100px) 把倾斜后的右侧面向右移动，拼到正面的右侧 */
+                        translateX(100px)
+                        /* 第三步：translateZ(0) 固定Z轴位置 */
+                        translateZ(0);
+            /* 右侧面的原点设为左侧中心，倾斜更自然 */
+            transform-origin: left center;
+        }
+    </style>
+</head>
+<body>
+    <!-- 立方体容器，里面放3个面的div -->
+    <div class="cube">
+        <!-- 正面 -->
+        <div class="cube-face cube-front"></div>
+        <!-- 顶面 -->
+        <div class="cube-face cube-top"></div>
+        <!-- 右侧面 -->
+        <div class="cube-face cube-right"></div>
+    </div>
+</body>
+</html>
